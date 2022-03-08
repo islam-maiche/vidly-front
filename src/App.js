@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import {useCallback, useEffect, useState} from "react";
+import Movies from "./components/movies";
 
 function App() {
 
@@ -33,7 +34,7 @@ function App() {
 
     return (
         <main className='container'>
-            <h1>Hello world</h1>
+            <Movies/>
             {/*<div>{counter}</div>*/}
             {/*<button onClick={() => {*/}
             {/*    setCounter(counter + 1)*/}
