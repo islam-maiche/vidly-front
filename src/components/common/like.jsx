@@ -1,12 +1,12 @@
 import React from "react";
 
-// input: liked: boolean
-// output: onClick
+function Like({liked, onClick}) {
+    let classes = "fa fa-heart";
+    if (!liked) classes += "-o";
 
-function Like() {
     return(
         <React.Fragment>
-            <i className="fa fa-heart-o" aria-hidden="true"></i>
+            <i onClick={onClick} className={classes} aria-hidden="true" style={{cursor: 'pointer'}}></i>
         </React.Fragment>
     )
 }

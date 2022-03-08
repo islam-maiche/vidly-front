@@ -23,13 +23,21 @@ function renderMovies(movies){
     );
 }
 
-let handleDelete = (movie, movies) => {
-    return  movies.filter(mov => mov._id !== movie._id);
-}
-
 function Movies(props) {
     const [movies, setMovies] = useState(getMovies);
     const { length: count } = movies;
+
+    const handleDelete = (movieId) => {
+        setMovies(movies.filter(movie => movie._id !== movieId));
+    }
+
+    const handleLike = (movie) => {
+        const mov = [...movies];
+        const index = mov.indexOf(movie);
+        mov[index] = { ...mov[index] }
+        mov[index].liked = !mov[index].liked;
+        setMovies(mov);
+    }
 
     if (count === 0) return <p>There are no movies in the database.</p>
     return (
@@ -49,13 +57,13 @@ function Movies(props) {
                 <tbody>
                     {movies.map(movie =>
                         <tr key={movie._id}>
-                            <td>{movie.title} <input type="hidden" value={movie._id}/></td>
+                            <td>{movie.title}</td>
                             <td>{movie.genre.name}</td>
                             <td>{movie.numberInStock}</td>
                             <td>{movie.dailyRentalRate}</td>
-                            <td><Like/></td>
+                            <td><Like liked={movie.liked} onClick={() => handleLike(movie)}/></td>
                             <td>
-                                <button className='btn btn-danger btn-sm' onClick={() => setMovies(handleDelete(movie, movies))}>Delete</button>
+                                <button className='btn btn-danger btn-sm' onClick={() => handleDelete(movie._id)}>Delete</button>
                             </td>
                         </tr>)}
                 </tbody>
