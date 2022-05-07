@@ -32,6 +32,9 @@ function App() {
 
     // setCounter();
 
+    useEffect(() => {
+        document.title = 'Vidly App';
+    })
     return (
         <main className='container'>
             <Movies/>

@@ -1,6 +1,8 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {getMovies} from "../services/fakeMovieService";
 import Like from "./common/like";
+import Pagination from "./common/pagination";
+import {paginate} from "./utils/paginate";
 
 
 function renderMovies(movies){
@@ -24,21 +26,28 @@ function renderMovies(movies){
 }
 
 function Movies(props) {
-    const [movies, setMovies] = useState(getMovies);
-    const { length: count } = movies;
+    const [allMovies, setAllMovies] = useState(getMovies);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(4);
+    const { length: count } = allMovies;
 
     const handleDelete = (movieId) => {
-        setMovies(movies.filter(movie => movie._id !== movieId));
+        setAllMovies(allMovies.filter(movie => movie._id !== movieId));
     }
 
     const handleLike = (movie) => {
-        const mov = [...movies];
+        const mov = [...allMovies];
         const index = mov.indexOf(movie);
         mov[index] = { ...mov[index] }
         mov[index].liked = !mov[index].liked;
-        setMovies(mov);
+        setAllMovies(mov)
     }
 
+    const handlePageChange = page => {
+         setCurrentPage(page);
+    }
+
+    const movies = paginate(allMovies, currentPage, pageSize);
     if (count === 0) return <p>There are no movies in the database.</p>
     return (
         <React.Fragment>
@@ -68,6 +77,7 @@ function Movies(props) {
                         </tr>)}
                 </tbody>
             </table>
+            <Pagination itemsCount={count} pageSize={pageSize} currentPage={currentPage} onPageChange={(page) => handlePageChange(page)}/>
         </React.Fragment>
     );
 }
