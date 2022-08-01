@@ -2,8 +2,7 @@ import React from "react";
 import Like from "./common/like";
 import Table from "./common/table";
 
-const MoviesTable = (props) => {
-    const { movies, onLike, onDelete, onSort, sortColumn } = props;
+const MoviesTable = ({ movies, onLike, onDelete, onSort, sortColumn }) => {
 
     let columns = [
         { path: "title", label: "Title" },

@@ -20,6 +20,21 @@ function Movies(props) {
         setGenres(getGenres);
     }, []);
 
+    function getPagedData() {
+        const filtered = selectecGenre
+            ? allMovies.filter((m) => m.genre._id == selectecGenre._id)
+            : allMovies;
+        const sorted = _.orderBy(
+            filtered,
+            [sortColumn.path],
+            [sortColumn.order]
+        );
+
+        const movies = paginate(sorted, currentPage, pageSize);
+
+        return { totalCount: filtered.length, data: movies };
+    }
+
     const handleDelete = (movieId) => {
         setAllMovies(allMovies.filter((movie) => movie._id !== movieId));
     };
@@ -45,15 +60,9 @@ function Movies(props) {
          setSortColumn(_sortColumn)
     }
 
-    const filtered = selectecGenre
-        ? allMovies.filter((m) => m.genre._id == selectecGenre._id)
-        : allMovies;
-    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order])
-    
-    const movies = paginate(sorted, currentPage, pageSize);
-    const count = filtered.length;
+    const {totalCount, data: movies} = getPagedData();
 
-    if (count === 0) return <p>There are no movies in the database.</p>;
+    if (totalCount === 0) return <p>There are no movies in the database.</p>;
     return (
         <div className="row">
             <div className="col-3"> 
@@ -65,7 +74,7 @@ function Movies(props) {
             </div>
 
             <div className="col">
-                <p>Showing {count} movies in the database.</p>
+                <p>Showing {totalCount} movies in the database.</p>
                 <MoviesTable
                     movies={movies}
                     sortColumn={sortColumn}
@@ -74,7 +83,7 @@ function Movies(props) {
                     onSort={(column) => handleSort(column)}
                 />
                 <Pagination
-                    itemsCount={count}
+                    itemsCount={totalCount}
                     pageSize={pageSize}
                     currentPage={currentPage}
                     onPageChange={(page) => handlePageChange(page)}
