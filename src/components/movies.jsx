@@ -55,10 +55,10 @@ function Movies(props) {
         setSelectecGenre(genre);
     };
 
-    const handleSort = path => {
-        const _sortColumn = {...sortColumn}
-         setSortColumn(_sortColumn)
-    }
+    const handleSort = (path) => {
+        const _sortColumn = { ...sortColumn };
+        setSortColumn(_sortColumn);
+    };
 
     const {totalCount, data: movies} = getPagedData();
 
